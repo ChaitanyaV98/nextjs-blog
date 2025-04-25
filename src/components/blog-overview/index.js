@@ -22,7 +22,7 @@ export default function BlogOverview() {
       if (result?.success) {
         setLoading(false);
         setOpenBlogDialog(false);
-        setBlogFormData(blogFormData);
+        setBlogFormData(initialBlogFormData);
       }
     } catch (e) {
       console.log("Error", e);
