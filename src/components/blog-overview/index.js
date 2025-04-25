@@ -4,6 +4,8 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
+  CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "../ui/button";
@@ -48,6 +50,19 @@ export default function BlogOverview({ blogsList }) {
     }
   };
 
+  const handleDeleteBlog = async (id) => {
+    try {
+      const apiResponse = await fetch(`/api/delete-blog?id=${id}`, {
+        method: "DELETE",
+      });
+      const result = await apiResponse.json();
+
+      if (result?.success) router.refresh();
+    } catch (error) {
+      console.log("Error on handle delete", error);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col gap-10 bg-gradient-to-r from-purple-500 to-blue-600">
       <AddNewBlog
@@ -69,7 +84,7 @@ export default function BlogOverview({ blogsList }) {
                 <CardDescription>{blogItem?.description}</CardDescription>
                 <div className="mt-5 flex gap-5  items-center">
                   <Button onClick={() => handleEdit(blogItem)}>Edit</Button>
-                  <Button onClick={() => handleDeleteBlogByID(blogItem._id)}>
+                  <Button onClick={() => handleDeleteBlog(blogItem._id)}>
                     Delete
                   </Button>
                 </div>
