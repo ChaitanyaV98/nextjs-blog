@@ -34,10 +34,6 @@ export default function AddNewBlog({
         open={openBlogDialog}
         onOpenChange={() => {
           setOpenBlogDialog(false);
-          setBlogFormData({
-            title: "",
-            description: "",
-          });
         }}
       >
         <DialogContent className="sm:max-w-[425px]">
@@ -85,6 +81,7 @@ export default function AddNewBlog({
               />
             </div>
           </div>
+
           <DialogFooter>
             <Button onClick={handleAddNewBlog} type="button">
               {loading ? "Saving changes" : "Save changes"}
