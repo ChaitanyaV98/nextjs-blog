@@ -19,13 +19,18 @@ export default function AddNewBlog({
   blogFormData,
   setBlogFormData,
   handleAddNewBlog,
+  currentEditedBlogId,
+  setCurrentEditedBlogId,
 }) {
   console.log("BLOG FORM data", blogFormData);
-
+  console.log("currentEditedBlogId", currentEditedBlogId);
   return (
     <>
       <Button
-        onClick={() => setOpenBlogDialog(true)}
+        onClick={() => {
+          setCurrentEditedBlogId(null);
+          setOpenBlogDialog(true);
+        }}
         className="text-white border-1 border-white px-6 py-2 bg-black"
       >
         Add new Blog
@@ -34,13 +39,20 @@ export default function AddNewBlog({
         open={openBlogDialog}
         onOpenChange={() => {
           setOpenBlogDialog(false);
+          setBlogFormData({
+            title: "",
+            description: "",
+          });
+          setCurrentEditedBlogId(null);
         }}
       >
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>
               {/* {currentEditedBlogID ? "Edit Blog" : "Add New Blog"}{" "} */}
-              Add new Blog
+              {currentEditedBlogId !== null
+                ? "Edit current blog"
+                : "Add new Blog"}
             </DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">

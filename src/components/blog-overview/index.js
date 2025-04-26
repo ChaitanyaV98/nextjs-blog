@@ -23,6 +23,7 @@ export default function BlogOverview({ blogsList }) {
   const [openBlogDialog, setOpenBlogDialog] = useState(false);
   const [loading, setLoading] = useState(false);
   const [blogFormData, setBlogFormData] = useState(initialBlogFormData);
+  const [currentEditedBlogId, setCurrentEditedBlogId] = useState(null);
 
   useEffect(() => {
     router.refresh();
@@ -31,17 +32,34 @@ export default function BlogOverview({ blogsList }) {
   const handleAddNewBlog = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/add-blog", {
-        method: "POST",
-        body: JSON.stringify(blogFormData),
-      });
-      router.refresh();
+
+      const response =
+        currentEditedBlogId !== null
+          ? await fetch(`/api/update-blog?id=${currentEditedBlogId}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(blogFormData),
+            })
+          : await fetch("/api/add-blog", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(blogFormData),
+            });
+
       const result = await response.json();
 
       if (result?.success) {
         setLoading(false);
         setOpenBlogDialog(false);
         setBlogFormData(initialBlogFormData);
+        router.refresh(); // <-- Refresh AFTER success
+      } else {
+        setLoading(false);
+        console.log("Failed to add/update blog", result);
       }
     } catch (e) {
       console.log("Error", e);
@@ -63,6 +81,15 @@ export default function BlogOverview({ blogsList }) {
     }
   };
 
+  const handleEditBlog = async (getCurrentBlog) => {
+    setCurrentEditedBlogId(getCurrentBlog?._id);
+    setBlogFormData({
+      title: getCurrentBlog?.title,
+      description: getCurrentBlog?.description,
+    });
+    setOpenBlogDialog(true);
+  };
+
   return (
     <div className="min-h-screen flex flex-col gap-10 bg-gradient-to-r from-purple-500 to-blue-600">
       <AddNewBlog
@@ -73,6 +100,8 @@ export default function BlogOverview({ blogsList }) {
         blogFormData={blogFormData}
         setBlogFormData={setBlogFormData}
         handleAddNewBlog={handleAddNewBlog}
+        currentEditedBlogId={currentEditedBlogId}
+        setCurrentEditedBlogId={setCurrentEditedBlogId}
       />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
         {blogsList && blogsList.length > 0 ? (
@@ -83,7 +112,7 @@ export default function BlogOverview({ blogsList }) {
 
                 <CardDescription>{blogItem?.description}</CardDescription>
                 <div className="mt-5 flex gap-5  items-center">
-                  <Button onClick={() => handleEdit(blogItem)}>Edit</Button>
+                  <Button onClick={() => handleEditBlog(blogItem)}>Edit</Button>
                   <Button onClick={() => handleDeleteBlog(blogItem._id)}>
                     Delete
                   </Button>

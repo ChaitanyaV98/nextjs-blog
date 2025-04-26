@@ -10,7 +10,7 @@ const AddNewBlog = Joi.object({
 
 export async function POST(req) {
   try {
-    await connectToDB(); // ✅ CALL the function
+    await connectToDB();
 
     const extractBlogData = await req.json();
     const { title, description } = extractBlogData;
