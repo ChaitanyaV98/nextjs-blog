@@ -91,7 +91,7 @@ export default function BlogOverview({ blogsList }) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col gap-10 bg-gradient-to-r from-purple-500 to-blue-600">
+    <div className="min-h-screen flex flex-col gap-10 bg-gradient-to-r from-purple-500 to-blue-600 pt-[20px] px-[20px]">
       <AddNewBlog
         openBlogDialog={openBlogDialog}
         setOpenBlogDialog={setOpenBlogDialog}

@@ -17,8 +17,5 @@ async function fetchListOfBlogs() {
 export default async function Blogs() {
   const blogsList = await fetchListOfBlogs();
 
-  // ✅ This logs in your terminal (server-side)
-  console.log("blogsList from server component:", blogsList);
-
   return <BlogsOverview blogsList={blogsList} />;
 }

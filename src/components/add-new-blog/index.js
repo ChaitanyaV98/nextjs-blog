@@ -22,8 +22,6 @@ export default function AddNewBlog({
   currentEditedBlogId,
   setCurrentEditedBlogId,
 }) {
-  console.log("BLOG FORM data", blogFormData);
-  console.log("currentEditedBlogId", currentEditedBlogId);
   return (
     <>
       <Button
@@ -31,7 +29,7 @@ export default function AddNewBlog({
           setCurrentEditedBlogId(null);
           setOpenBlogDialog(true);
         }}
-        className="text-white border-1 border-white px-6 py-2 bg-black"
+        className="text-white border-1 border-white px-6 py-2 bg-black w-[150px]"
       >
         Add new Blog
       </Button>
