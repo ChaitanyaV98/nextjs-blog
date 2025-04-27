@@ -1,8 +1,9 @@
 import BlogsOverview from "@components/blog-overview";
+import { BASE_URL } from "@/config/env";
 
 async function fetchListOfBlogs() {
   try {
-    const res = await fetch("http://localhost:3000/api/get-blogs", {
+    const res = await fetch(`${BASE_URL}/api/get-blogs`, {
       method: "GET",
       cache: "no-store",
     });
