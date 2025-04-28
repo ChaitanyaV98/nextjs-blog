@@ -4,9 +4,12 @@ import Blog from "@/models/blog";
 
 export async function GET() {
   try {
+    console.log("Before connecting db");
     await connectToDB();
+    console.log("after connecting db");
     const extractBlogsFromDb = await Blog.find({});
 
+    console.log("🚀 ~ GET ~ extractBlogsFromDb:", extractBlogsFromDb);
     if (extractBlogsFromDb) {
       return NextResponse.json({
         success: true,

@@ -1,13 +1,24 @@
 import BlogsOverview from "@components/blog-overview";
-import { BASE_URL } from "@/config/env";
+import connectToDB from "@/database";
+import Blog from "@/models/blog";
 
 export default async function Blogs() {
-  const data = await fetch(`${BASE_URL}/api/get-blogs`, {
-    method: "GET",
-    cache: "no-store",
-  });
-  const jsonData = await data.json();
-  const blogsList = jsonData.data;
+  try {
+    await connectToDB();
 
-  return <BlogsOverview blogsList={blogsList} />;
+    const extractBlogsFromDb = await Blog.find({});
+
+    const blogsList = extractBlogsFromDb.map((blog) => {
+      const plainBlog = blog.toObject();
+      return {
+        ...plainBlog,
+        _id: plainBlog._id.toString(), // Important: convert _id
+      };
+    });
+
+    return <BlogsOverview blogsList={blogsList} />;
+  } catch (error) {
+    console.error("Error fetching blogs:", error);
+    return <div>Error loading blogs. Please try again later.</div>;
+  }
 }
