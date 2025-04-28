@@ -4,8 +4,10 @@ import Blog from "@/models/blog";
 
 export default async function Blogs() {
   try {
+    console.log("Connecting to the database...");
     await connectToDB();
 
+    console.log("Fetching blogs from the database...");
     const extractBlogsFromDb = await Blog.find({});
 
     const blogsList = extractBlogsFromDb.map((blog) => {
@@ -15,6 +17,8 @@ export default async function Blogs() {
         _id: plainBlog._id.toString(), // Important: convert _id
       };
     });
+
+    console.log("Blogs fetched successfully:", blogsList);
 
     return <BlogsOverview blogsList={blogsList} />;
   } catch (error) {
