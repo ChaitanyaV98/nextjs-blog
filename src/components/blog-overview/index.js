@@ -25,9 +25,9 @@ export default function BlogOverview({ blogsList }) {
   const [blogFormData, setBlogFormData] = useState(initialBlogFormData);
   const [currentEditedBlogId, setCurrentEditedBlogId] = useState(null);
 
-  useEffect(() => {
-    router.refresh();
-  }, []);
+  // useEffect(() => {
+  //   router.refresh();
+  // }, []);
 
   const handleAddNewBlog = async () => {
     try {
@@ -35,12 +35,15 @@ export default function BlogOverview({ blogsList }) {
 
       const response =
         currentEditedBlogId !== null
-          ? await fetch(`/api/update-blog?id=${currentEditedBlogId}`, {
+          ? await fetch(`/api/update-blog`, {
               method: "PUT",
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify(blogFormData),
+              body: JSON.stringify({
+                id: currentEditedBlogId,
+                ...blogFormData,
+              }),
             })
           : await fetch("/api/add-blog", {
               method: "POST",
@@ -67,11 +70,14 @@ export default function BlogOverview({ blogsList }) {
       setBlogFormData(initialBlogFormData);
     }
   };
-
   const handleDeleteBlog = async (id) => {
     try {
-      const apiResponse = await fetch(`/api/delete-blog?id=${id}`, {
+      const apiResponse = await fetch("/api/delete-blog", {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
       });
       const result = await apiResponse.json();
 

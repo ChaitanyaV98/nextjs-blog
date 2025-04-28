@@ -6,17 +6,16 @@ export async function DELETE(req) {
   try {
     await connectToDB();
 
-    const { searchParams } = new URL(req.url);
-    const currentBlogId = searchParams.get("id");
+    const { id } = await req.json(); // <-- Get id from body
 
-    if (!currentBlogId) {
+    if (!id) {
       return NextResponse.json(
         { success: false, message: "Blog id is required" },
         { status: 400 }
       );
     }
 
-    const deleteBlogById = await Blog.findByIdAndDelete(currentBlogId);
+    const deleteBlogById = await Blog.findByIdAndDelete(id);
 
     if (deleteBlogById) {
       return NextResponse.json({
